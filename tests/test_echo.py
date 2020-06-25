@@ -7,7 +7,7 @@ Students are expected to edit this module, to add more tests to run
 against the 'echo.py' program.
 """
 
-__author__ = "???"
+__author__ = "Justin Phillips"
 
 import sys
 import importlib
@@ -117,6 +117,65 @@ class TestEcho(unittest.TestCase):
     #
     # Students: add more cmd line options tests here.
     #
+
+    def test_upper_short(self):
+        """Check if short option "-u" performs uppercasing"""
+        args = ["-u", "hello world"]
+        with Capturing() as output:
+            self.module.main(args)
+        assert output, "The program did not print anything"
+        self.assertEqual(output[0], "HELLO WORLD")
+
+
+    def test_title_short(self):
+        """Check if short option "-t" performs titlecasing"""
+        args = ["-t", "HELLO WORLD"]
+        with Capturing() as output:
+            self.module.main(args)
+        assert output, "The program did not print anything" 
+        self.assertEqual(output[0], "Hello World")
+
+    def test_lower_long(self):
+        """Check if long option "--lower" performs lowercasing"""
+        args = ["--lower", "HELLO WORLD"]
+        with Capturing() as output:
+            self.module.main(args)
+        assert output, "The program did not print anything"
+        self.assertEqual(output[0], "hello world")
+
+    def test_upper_long(self):
+        """Check if long option "--upper" performs uppercasing"""
+        args = ["--upper", "hello world"]
+        with Capturing() as output:
+            self.module.main(args)
+        assert output, "The program did not print anything"
+        self.assertEqual(output[0], "HELLO WORLD")
+
+    def test_title_long(self):
+        """Check if long option "--title" performs titlecasing"""
+        args = ["--title", "HELLO WORLD"]
+        with Capturing() as output:
+            self.module.main(args)
+        assert output, "The program did not print anything"
+        self.assertEqual(output[0], "Hello World")
+
+    def test_allargs_short(self):
+        """Check if all short options "-lut" performs correctly"""
+        args = ["-tul", "hElLo WoRlD"]
+        with Capturing() as output:
+            self.module.main(args)
+        assert output, "The program did not print anything"
+        self.assertEqual(output[0], "Hello World") 
+
+    def test_help(self):
+        process = subprocess.Popen(
+            ["python", "./echo.py", "-h"],
+            stdout=subprocess.PIPE)
+        stdout, _ = process.communicate()
+        with open("./USAGE") as f:
+            usage = f.read()
+
+        self.assertEqual(stdout.decode("utf-8"), usage)
 
 
 if __name__ == '__main__':
